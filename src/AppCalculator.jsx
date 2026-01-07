@@ -135,10 +135,6 @@ export function AppCalculator() {
         <hr />
 
         <div className='app-calculator-przyciski'>
-            {/* <AppButton disabled={zablokujPrzyciski} title="+" onClick={() => dodaj()}/>
-            <AppButton disabled={zablokujPrzyciski} title="-" onClick={() => odejmij()}/>
-            <AppButton disabled={zablokujPrzyciski} title="*" onClick={() => pomnoz()}/>
-            <AppButton disabled={zablokujDzielenie} title="/" onClick={() => podziel()}/> */}
             <AppButton disabled={zablokujPrzyciski} title="+"  onClick={() => { dodaj(); setOstatniaCzynność('Wykonano obliczenia'); }} />
             <AppButton disabled={zablokujPrzyciski} title="-" onClick={() => { odejmij(); setOstatniaCzynność('Wykonano obliczenia'); }} />
             <AppButton disabled={zablokujPrzyciski} title="*" onClick={() => { pomnoz(); setOstatniaCzynność('Wykonano obliczenia'); }} />
@@ -148,7 +144,7 @@ export function AppCalculator() {
         <hr />
         
         <div className='app-calculator-historia'>
-            <AppCalculationHistory historia={historia} onClick={(index) => onAppCalculationHistoryClick(index)}/>
+            <div>Ostatnia czynność: {ostatniaCzynność}</div>
             <AppCalculationHistory historia={historia} onClick={przywrocHistorieHandler} />
 
         </div>

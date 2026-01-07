@@ -2,10 +2,6 @@ import './AppCalculationHistory.css'
 
 export function AppCalculationHistory({historia, onClick}) 
 {
-    const przywrocHistorieHandler = (index) => {
-        onAppCalculationHistoryClick(index);  // hook z useKalkulator
-        setOstatniaCzynność('Przywrócono historyczny stan');
-    }
     
     return (
         <table className='app-calculation-history'>
