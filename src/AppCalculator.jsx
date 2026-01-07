@@ -19,80 +19,18 @@ export function AppCalculator() {
         onAppCalculationHistoryClick
     } = useKalkulator();
 
-
-    // function dodaj() {
-    //     aktualizujHistorie('+', liczbaA + liczbaB);
-    // }
-
-    // function odejmij() {
-    //     aktualizujHistorie('-', liczbaA - liczbaB);
-    // }
-
-    // function pomnoz() {
-    //     aktualizujHistorie('*', liczbaA * liczbaB);
-    // }
-
-    // function podziel() {
-    //     if(liczbaB !== 0) {
-    //         aktualizujHistorie('/', liczbaA / liczbaB);
-    //     }
-    // }
-
-    // function liczbaAOnChange(value) {
-    //     setLiczbaA(parsujLiczbe(value));
-    // }
-
-    // function parsujLiczbe(value) {
-    //     const sparsowanaLiczba = parseFloat(value);
-    //     if(isNaN(sparsowanaLiczba)) {
-    //         return null;
-    //     } else {
-    //         return sparsowanaLiczba;
-    //     } 
-    // }
-
-    // function liczbaBOnChange(value) {
-    //     setLiczbaB(parsujLiczbe(value));
-    // }
-
-    // function onAppCalculationHistoryClick(index) {
-    //     const nowaHistoria = historia.slice(0, index + 1);
-    //     setHistoria(nowaHistoria);
-    //     setLiczbaA(historia[index].a);
-    //     setLiczbaB(historia[index].b);
-    //     setWynik(historia[index].wynik);
-    // }
-
-    // function aktualizujHistorie(operation, wynik) {
-    //     const nowaHistoria = [...historia, { a: liczbaA, b: liczbaB, operation: operation, wynik: wynik }];
-    //     setHistoria(nowaHistoria);
-    //     setWynik(wynik);
-    // }
-
-    //let porownanie;
     const [porownanie, setPorownanie] = useState('');
     const [ostatniaCzynność, setOstatniaCzynność] = useState('Brak');
     const przywrocHistorieHandler = (index) => {
+
+        
     onAppCalculationHistoryClick(index); // z hooka useKalkulator
     setOstatniaCzynność('Przywrócono historyczny stan');
 };
     let zablokujPrzyciski = liczbaA == null || liczbaB == null;
     let zablokujDzielenie = zablokujPrzyciski || liczbaB === 0;
 
-    // if(zablokujPrzyciski) 
-    // {
-    //     porownanie = '';
-    // } 
-    // else 
-    // {
-    //     if(liczbaA === liczbaB) {
-    //         porownanie = 'Liczba A jest równa liczbie B.';
-    //     } else if(liczbaA > liczbaB) {
-    //         porownanie = 'Liczba A jest większa od liczby B.';
-    //     } else {
-    //         porownanie = 'Liczba B jest większa od liczby A.';
-    //     }
-    // }
+ 
 
     useEffect(() => {
         if (liczbaA == null || liczbaB == null) {

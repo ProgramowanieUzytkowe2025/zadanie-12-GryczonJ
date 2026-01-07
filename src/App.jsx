@@ -3,14 +3,13 @@ import { AppCalculator } from './AppCalculator'
 import { AppHeader } from './AppHeader'
 import { FontProvider, useFont } from './FontProvider';
 
-//import { useState } from 'react';
 function AppContent() {
     const { czcionka } = useFont();
 
     return (
         <div className="app" style={{ fontSize: czcionka }}>
             <div>
-                <AppHeader imie={'Imię'} nazwisko={'Nazwisko'} />
+                <AppHeader imie={'Jan'} nazwisko={'Gryczon'} />
             </div>
             <div>
                 <AppCalculator />
