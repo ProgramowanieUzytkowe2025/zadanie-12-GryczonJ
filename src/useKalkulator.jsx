@@ -1,10 +1,13 @@
 import { useState } from 'react';
 
 export function useKalkulator(initialA = null, initialB = null) {
+    const savedHistory = sessionStorage.getItem('kalkulatorHistoria');
+    const initialHistory = savedHistory ? JSON.parse(savedHistory) : [];
+
     const [liczbaA, setLiczbaA] = useState(initialA);
     const [liczbaB, setLiczbaB] = useState(initialB);
-    const [wynik, setWynik] = useState(null);
-    const [historia, setHistoria] = useState([]);
+    const [wynik, setWynik] = useState(initialHistory.length ? initialHistory[initialHistory.length - 1].wynik : null);
+    const [historia, setHistoria] = useState(initialHistory);
 
     const parsujLiczbe = (value) => {
         const parsed = parseFloat(value);
@@ -18,6 +21,7 @@ export function useKalkulator(initialA = null, initialB = null) {
         const nowaHistoria = [...historia, { a: liczbaA, b: liczbaB, operation, wynik }];
         setHistoria(nowaHistoria);
         setWynik(wynik);
+        sessionStorage.setItem('kalkulatorHistoria', JSON.stringify(nowaHistoria));
     }
 
     const dodaj = () => aktualizujHistorie('+', liczbaA + liczbaB);
