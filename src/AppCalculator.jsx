@@ -1,81 +1,106 @@
 import './AppCalculator.css';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AppButton } from './AppButton';
 import { AppCalculationHistory } from './AppCalculationHistory';
+import { useKalkulator } from './useKalkulator'; 
 
 export function AppCalculator() {
-    const [liczbaA, setLiczbaA] = useState(null);
-    const [liczbaB, setLiczbaB] = useState(null);
-    const [wynik, setWynik] = useState(null);
-    const [historia, setHistoria] = useState([]);
+    const {
+        liczbaA,
+        liczbaB,
+        wynik,
+        historia,
+        liczbaAOnChange,
+        liczbaBOnChange,
+        dodaj,
+        odejmij,
+        pomnoz,
+        podziel,
+        onAppCalculationHistoryClick
+    } = useKalkulator();
 
-    function dodaj() {
-        aktualizujHistorie('+', liczbaA + liczbaB);
-    }
 
-    function odejmij() {
-        aktualizujHistorie('-', liczbaA - liczbaB);
-    }
+    // function dodaj() {
+    //     aktualizujHistorie('+', liczbaA + liczbaB);
+    // }
 
-    function pomnoz() {
-        aktualizujHistorie('*', liczbaA * liczbaB);
-    }
+    // function odejmij() {
+    //     aktualizujHistorie('-', liczbaA - liczbaB);
+    // }
 
-    function podziel() {
-        if(liczbaB !== 0) {
-            aktualizujHistorie('/', liczbaA / liczbaB);
-        }
-    }
+    // function pomnoz() {
+    //     aktualizujHistorie('*', liczbaA * liczbaB);
+    // }
 
-    function liczbaAOnChange(value) {
-        setLiczbaA(parsujLiczbe(value));
-    }
+    // function podziel() {
+    //     if(liczbaB !== 0) {
+    //         aktualizujHistorie('/', liczbaA / liczbaB);
+    //     }
+    // }
 
-    function parsujLiczbe(value) {
-        const sparsowanaLiczba = parseFloat(value);
-        if(isNaN(sparsowanaLiczba)) {
-            return null;
-        } else {
-            return sparsowanaLiczba;
-        } 
-    }
+    // function liczbaAOnChange(value) {
+    //     setLiczbaA(parsujLiczbe(value));
+    // }
 
-    function liczbaBOnChange(value) {
-        setLiczbaB(parsujLiczbe(value));
-    }
+    // function parsujLiczbe(value) {
+    //     const sparsowanaLiczba = parseFloat(value);
+    //     if(isNaN(sparsowanaLiczba)) {
+    //         return null;
+    //     } else {
+    //         return sparsowanaLiczba;
+    //     } 
+    // }
 
-    function onAppCalculationHistoryClick(index) {
-        const nowaHistoria = historia.slice(0, index + 1);
-        setHistoria(nowaHistoria);
-        setLiczbaA(historia[index].a);
-        setLiczbaB(historia[index].b);
-        setWynik(historia[index].wynik);
-    }
+    // function liczbaBOnChange(value) {
+    //     setLiczbaB(parsujLiczbe(value));
+    // }
 
-    function aktualizujHistorie(operation, wynik) {
-        const nowaHistoria = [...historia, { a: liczbaA, b: liczbaB, operation: operation, wynik: wynik }];
-        setHistoria(nowaHistoria);
-        setWynik(wynik);
-    }
+    // function onAppCalculationHistoryClick(index) {
+    //     const nowaHistoria = historia.slice(0, index + 1);
+    //     setHistoria(nowaHistoria);
+    //     setLiczbaA(historia[index].a);
+    //     setLiczbaB(historia[index].b);
+    //     setWynik(historia[index].wynik);
+    // }
 
-    let porownanie;
+    // function aktualizujHistorie(operation, wynik) {
+    //     const nowaHistoria = [...historia, { a: liczbaA, b: liczbaB, operation: operation, wynik: wynik }];
+    //     setHistoria(nowaHistoria);
+    //     setWynik(wynik);
+    // }
+
+    //let porownanie;
+    const [porownanie, setPorownanie] = useState('');
     let zablokujPrzyciski = liczbaA == null || liczbaB == null;
     let zablokujDzielenie = zablokujPrzyciski || liczbaB === 0;
 
-    if(zablokujPrzyciski) 
-    {
-        porownanie = '';
-    } 
-    else 
-    {
-        if(liczbaA === liczbaB) {
-            porownanie = 'Liczba A jest równa liczbie B.';
-        } else if(liczbaA > liczbaB) {
-            porownanie = 'Liczba A jest większa od liczby B.';
+    // if(zablokujPrzyciski) 
+    // {
+    //     porownanie = '';
+    // } 
+    // else 
+    // {
+    //     if(liczbaA === liczbaB) {
+    //         porownanie = 'Liczba A jest równa liczbie B.';
+    //     } else if(liczbaA > liczbaB) {
+    //         porownanie = 'Liczba A jest większa od liczby B.';
+    //     } else {
+    //         porownanie = 'Liczba B jest większa od liczby A.';
+    //     }
+    // }
+
+    useEffect(() => {
+        if (liczbaA == null || liczbaB == null) {
+            setPorownanie('');
+        } else if (liczbaA === liczbaB) {
+            setPorownanie('Liczba A jest równa liczbie B.');
+        } else if (liczbaA > liczbaB) {
+            setPorownanie('Liczba A jest większa od liczby B.');
         } else {
-            porownanie = 'Liczba B jest większa od liczby A.';
+            setPorownanie('Liczba B jest większa od liczby A.');
         }
-    }
+    }, [liczbaA, liczbaB]);
+
 
     return (
     <div className='app-calculator'>
@@ -105,10 +130,14 @@ export function AppCalculator() {
         <hr />
 
         <div className='app-calculator-przyciski'>
-            <AppButton disabled={zablokujPrzyciski} title="+" onClick={() => dodaj()}/>
+            {/* <AppButton disabled={zablokujPrzyciski} title="+" onClick={() => dodaj()}/>
             <AppButton disabled={zablokujPrzyciski} title="-" onClick={() => odejmij()}/>
             <AppButton disabled={zablokujPrzyciski} title="*" onClick={() => pomnoz()}/>
-            <AppButton disabled={zablokujDzielenie} title="/" onClick={() => podziel()}/>
+            <AppButton disabled={zablokujDzielenie} title="/" onClick={() => podziel()}/> */}
+            <AppButton disabled={zablokujPrzyciski} title="+" onClick={dodaj}/>
+            <AppButton disabled={zablokujPrzyciski} title="-" onClick={odejmij}/>
+            <AppButton disabled={zablokujPrzyciski} title="*" onClick={pomnoz}/>
+            <AppButton disabled={zablokujDzielenie} title="/" onClick={podziel}/>
         </div>
 
         <hr />
