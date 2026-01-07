@@ -71,6 +71,11 @@ export function AppCalculator() {
 
     //let porownanie;
     const [porownanie, setPorownanie] = useState('');
+    const [ostatniaCzynność, setOstatniaCzynność] = useState('Brak');
+    const przywrocHistorieHandler = (index) => {
+    onAppCalculationHistoryClick(index); // z hooka useKalkulator
+    setOstatniaCzynność('Przywrócono historyczny stan');
+};
     let zablokujPrzyciski = liczbaA == null || liczbaB == null;
     let zablokujDzielenie = zablokujPrzyciski || liczbaB === 0;
 
@@ -134,16 +139,18 @@ export function AppCalculator() {
             <AppButton disabled={zablokujPrzyciski} title="-" onClick={() => odejmij()}/>
             <AppButton disabled={zablokujPrzyciski} title="*" onClick={() => pomnoz()}/>
             <AppButton disabled={zablokujDzielenie} title="/" onClick={() => podziel()}/> */}
-            <AppButton disabled={zablokujPrzyciski} title="+" onClick={dodaj}/>
-            <AppButton disabled={zablokujPrzyciski} title="-" onClick={odejmij}/>
-            <AppButton disabled={zablokujPrzyciski} title="*" onClick={pomnoz}/>
-            <AppButton disabled={zablokujDzielenie} title="/" onClick={podziel}/>
+            <AppButton disabled={zablokujPrzyciski} title="+"  onClick={() => { dodaj(); setOstatniaCzynność('Wykonano obliczenia'); }} />
+            <AppButton disabled={zablokujPrzyciski} title="-" onClick={() => { odejmij(); setOstatniaCzynność('Wykonano obliczenia'); }} />
+            <AppButton disabled={zablokujPrzyciski} title="*" onClick={() => { pomnoz(); setOstatniaCzynność('Wykonano obliczenia'); }} />
+            <AppButton disabled={zablokujDzielenie} title="/" onClick={() => { podziel(); setOstatniaCzynność('Wykonano obliczenia'); }} />
         </div>
 
         <hr />
         
         <div className='app-calculator-historia'>
             <AppCalculationHistory historia={historia} onClick={(index) => onAppCalculationHistoryClick(index)}/>
+            <AppCalculationHistory historia={historia} onClick={przywrocHistorieHandler} />
+
         </div>
     </div>)
 }

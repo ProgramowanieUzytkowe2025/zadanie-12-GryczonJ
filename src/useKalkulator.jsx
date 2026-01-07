@@ -14,8 +14,8 @@ export function useKalkulator(initialA = null, initialB = null) {
         return isNaN(parsed) ? null : parsed;
     }
 
-    const liczbaAOnChange = (value) => setLiczbaA(parsujLiczbe(value));
-    const liczbaBOnChange = (value) => setLiczbaB(parsujLiczbe(value));
+    const liczbaAOnChange = (value) => setLiczbaA(parsujLiczbe(value), setOstatniaCzynność('Zmodyfikowano wartość liczby A'));
+    const liczbaBOnChange = (value) => setLiczbaB(parsujLiczbe(value),    setOstatniaCzynność('Zmodyfikowano wartość liczby B'));
 
     const aktualizujHistorie = (operation, wynik) => {
         const nowaHistoria = [...historia, { a: liczbaA, b: liczbaB, operation, wynik }];
