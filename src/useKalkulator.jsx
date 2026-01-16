@@ -6,8 +6,11 @@ export function useKalkulator(initialA = null, initialB = null) {
 
     const [liczbaA, setLiczbaA] = useState(initialA);
     const [liczbaB, setLiczbaB] = useState(initialB);
-    const [wynik, setWynik] = useState(initialHistory.length > 0 ? initialHistory[0].wynik : 0);
-    //const [wynik, setWynik] = useState(initialHistory.length ? initialHistory[initialHistory.length - 1].wynik : null);
+   
+    const [wynik, setWynik] = useState(
+        initialHistory.length > 0 ? initialHistory[initialHistory.length - 1].wynik : 0
+    );
+
     const [historia, setHistoria] = useState(initialHistory);
 
     const parsujLiczbe = (value) => {
@@ -15,9 +18,7 @@ export function useKalkulator(initialA = null, initialB = null) {
         return isNaN(parsed) ? null : parsed;
     }
 
-    //const liczbaAOnChange = (value) => setLiczbaA(parsujLiczbe(value), setOstatniaCzynność('Zmodyfikowano wartość liczby A'));
-    //const liczbaBOnChange = (value) => setLiczbaB(parsujLiczbe(value),    setOstatniaCzynność('Zmodyfikowano wartość liczby B'));
-    // Wewnątrz useKalkulator:
+    
     const liczbaAOnChange = (value) => setLiczbaA(parsujLiczbe(value));
     const liczbaBOnChange = (value) => setLiczbaB(parsujLiczbe(value));
     const aktualizujHistorie = (operation, wynik) => {
@@ -42,6 +43,8 @@ export function useKalkulator(initialA = null, initialB = null) {
         setLiczbaA(historia[index].a);
         setLiczbaB(historia[index].b);
         setWynik(historia[index].wynik);
+
+        sessionStorage.setItem('kalkulatorHistoria', JSON.stringify(nowaHistoria));
     }
 
     return {
