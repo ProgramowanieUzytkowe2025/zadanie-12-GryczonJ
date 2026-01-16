@@ -1,8 +1,18 @@
 import './AppCalculator.css';
-import { useState, useEffect } from 'react';
 import { AppButton } from './AppButton';
 import { AppCalculationHistory } from './AppCalculationHistory';
-import { useKalkulator } from './useKalkulator'; 
+import { useKalkulator } from './useKalkulator';
+import { useState, useEffect, useReducer } from 'react'; 
+
+function statusReducer(state, action) {
+    switch (action.type) {
+        case 'ZMIANA_A': return 'Zmodyfikowano wartość liczby A';
+        case 'ZMIANA_B': return 'Zmodyfikowano wartość liczby B';
+        case 'OBLICZENIA': return 'Wykonano obliczenia';
+        case 'PRZYWROCENIE': return 'Przywrócono historyczny stan';
+        default: return 'Brak';
+    }
+}
 
 export function AppCalculator() {
     const {
@@ -20,14 +30,12 @@ export function AppCalculator() {
     } = useKalkulator();
 
     const [porownanie, setPorownanie] = useState('');
-    const [ostatniaCzynność, setOstatniaCzynność] = useState('Brak');
+    const [ostatniaCzynnosc, dispatch] = useReducer(statusReducer, 'Brak');
     const przywrocHistorieHandler = (index) => {
-
-        
-    onAppCalculationHistoryClick(index); // z hooka useKalkulator
-    setOstatniaCzynność('Przywrócono historyczny stan');
-};
-    let zablokujPrzyciski = liczbaA == null || liczbaB == null;
+            onAppCalculationHistoryClick(index);
+            dispatch({ type: 'PRZYWROCENIE' }); // ZAMIAST setOstatniaCzynność
+        };
+    let zablokujPrzyciski = !liczbaA || !liczbaB;
     let zablokujDzielenie = zablokujPrzyciski || liczbaB === 0;
 
  
@@ -45,46 +53,62 @@ export function AppCalculator() {
     }, [liczbaA, liczbaB]);
 
 
-    return (
-    <div className='app-calculator'>
-        <div className='app-calculator-pole'>
-            <label>Wynik: </label>
-            <span>{wynik}</span>
+   return (
+        <div className='app-calculator'>
+            <div className='app-calculator-pole'>
+                <label>Wynik: </label>
+                <span>{wynik}</span>
+            </div>
+
+            <hr />
+
+            <div className='app-calculator-pole'>
+                <label>Dynamiczne porównanie liczb: </label>
+                <span>{porownanie}</span>
+            </div>
+
+            <hr />
+
+            <div className='app-calculator-pole'>
+                <label htmlFor="liczba1">Liczba 1</label>
+                <input 
+                    id="liczba1" 
+                    type="number" 
+                    value={liczbaA ?? ''} 
+                    onChange={(e) => {
+                        liczbaAOnChange(e.target.value);
+                        dispatch({ type: 'ZMIANA_A' }); 
+                    }} 
+                />
+            </div>
+            <div className='app-calculator-pole'>
+                <label htmlFor="liczba2">Liczba 2</label>
+                <input 
+                    id="liczba2" 
+                    type="number" 
+                    value={liczbaB ?? ''} 
+                    onChange={(e) => {
+                        liczbaBOnChange(e.target.value);
+                        dispatch({ type: 'ZMIANA_B' }); 
+                    }} 
+                />
+            </div>
+
+            <hr />
+
+            <div className='app-calculator-przyciski'>
+                <AppButton disabled={zablokujPrzyciski} title="+" onClick={() => { dodaj(); dispatch({ type: 'OBLICZENIA' }); }} />
+                <AppButton disabled={zablokujPrzyciski} title="-" onClick={() => { odejmij(); dispatch({ type: 'OBLICZENIA' }); }} />
+                <AppButton disabled={zablokujPrzyciski} title="*" onClick={() => { pomnoz(); dispatch({ type: 'OBLICZENIA' }); }} />
+                <AppButton disabled={zablokujDzielenie} title="/" onClick={() => { podziel(); dispatch({ type: 'OBLICZENIA' }); }} />
+            </div>
+
+            <hr />
+            
+            <div className='app-calculator-historia'>
+                <div>Ostatnia czynność: {ostatniaCzynnosc}</div>
+                <AppCalculationHistory historia={historia} onClick={przywrocHistorieHandler} />
+            </div>
         </div>
-
-        <hr />
-
-        <div className='app-calculator-pole'>
-            <label>Dynamiczne porównanie liczb: </label>
-            <span>{porownanie}</span>
-        </div>
-
-        <hr />
-
-        <div className='app-calculator-pole'>
-            <label htmlFor="liczba1">Liczba 1</label>
-            <input id="liczba1" type="number" value={liczbaA} onChange={(e) => liczbaAOnChange(e.target.value)} name="liczba1" />
-        </div>
-        <div className='app-calculator-pole'>
-            <label htmlFor="liczba2">Liczba 2</label>
-            <input id="liczba2" type="number" value={liczbaB} onChange={(e) => liczbaBOnChange(e.target.value)} name="liczba2" />
-        </div>
-
-        <hr />
-
-        <div className='app-calculator-przyciski'>
-            <AppButton disabled={zablokujPrzyciski} title="+"  onClick={() => { dodaj(); setOstatniaCzynność('Wykonano obliczenia'); }} />
-            <AppButton disabled={zablokujPrzyciski} title="-" onClick={() => { odejmij(); setOstatniaCzynność('Wykonano obliczenia'); }} />
-            <AppButton disabled={zablokujPrzyciski} title="*" onClick={() => { pomnoz(); setOstatniaCzynność('Wykonano obliczenia'); }} />
-            <AppButton disabled={zablokujDzielenie} title="/" onClick={() => { podziel(); setOstatniaCzynność('Wykonano obliczenia'); }} />
-        </div>
-
-        <hr />
-        
-        <div className='app-calculator-historia'>
-            <div>Ostatnia czynność: {ostatniaCzynność}</div>
-            <AppCalculationHistory historia={historia} onClick={przywrocHistorieHandler} />
-
-        </div>
-    </div>)
+    );
 }
