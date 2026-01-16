@@ -35,7 +35,7 @@ export function AppCalculator() {
             onAppCalculationHistoryClick(index);
             dispatch({ type: 'PRZYWROCENIE' }); // ZAMIAST setOstatniaCzynność
         };
-    let zablokujPrzyciski = !liczbaA || !liczbaB;
+    let zablokujPrzyciski = liczbaA === null || liczbaB === null;
     let zablokujDzielenie = zablokujPrzyciski || liczbaB === 0;
 
  
